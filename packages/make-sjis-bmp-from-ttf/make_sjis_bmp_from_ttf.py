@@ -21,10 +21,7 @@ def decode_sjis_code(code: int) -> str | None:
     if not ch:
         return None
 
-    # 制御文字を除外（0x00〜0x1F および 0x7F、ただし改行・タブは許可）
     if any(ord(c) < 0x20 and c not in ("\n", "\r", "\t") for c in ch):
-        return None
-    if any(ord(c) == 0x7F for c in ch):
         return None
 
     return ch
@@ -78,10 +75,7 @@ def main() -> None:
 
             tile = Image.new("1", (args.glyph_width, args.glyph_height), 1)
             draw_glyph(tile, font, ch, args.offset_y)
-
-            # 修正: x = high（上位バイト = 列方向）, y = low（下位バイト = 行方向）
-            # paste(tile, (x, y)) なので横=high*w, 縦=low*h
-            atlas.paste(tile, (high * args.glyph_width, low * args.glyph_height))
+            atlas.paste(tile, (low * args.glyph_width, high * args.glyph_height))
 
     bmp_buf = BytesIO()
     atlas.save(bmp_buf, format="BMP")
