@@ -1,4 +1,4 @@
-﻿# @your-scope/pixel-renderer
+# @your-scope/pixel-renderer
 
 v0.1 implementation for:
 - BMP(1bit) + manifest font registration

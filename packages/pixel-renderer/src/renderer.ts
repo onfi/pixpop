@@ -182,7 +182,7 @@ export class PixelRendererImpl implements PixelRenderer {
       atlas1Bit,
       glyphWidth: m.glyphWidth,
       glyphHeight: m.glyphHeight,
-      bitOrder: "msb",
+      bitOrder: m.bitOrder,
     });
 
     if (!this.firstFontId) {
