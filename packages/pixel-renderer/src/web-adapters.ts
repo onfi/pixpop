@@ -32,7 +32,9 @@ export function createWebPngDecode(): DecodeSpriteImageFn {
       bytes = input instanceof Uint8Array ? input : new Uint8Array(input);
     }
 
-    const blob = new Blob([bytes], { type: "image/png" });
+    const copy = new Uint8Array(bytes.byteLength);
+    copy.set(bytes);
+    const blob = new Blob([copy.buffer as ArrayBuffer], { type: "image/png" });
     const bitmap = await createImageBitmap(blob);
     const canvas = new OffscreenCanvas(bitmap.width, bitmap.height);
     const ctx = canvas.getContext("2d", { willReadFrequently: true });
