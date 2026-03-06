@@ -7,6 +7,47 @@ from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 
 
+DEFAULT_EXCLUDE_RANGES = (
+    (0xED40, 0xEEFC),  # IBM/NEC 外字領域
+    (0xFA40, 0xFC4B),  # IBM 拡張漢字領域
+)
+
+
+def parse_codepoint(value: str) -> int:
+    raw = value.strip().lower()
+    if raw.startswith("0x"):
+        raw = raw[2:]
+    if not raw:
+        raise ValueError("empty code")
+
+    try:
+        code = int(raw, 16)
+    except ValueError as exc:
+        raise ValueError(f"invalid hex code '{value}'") from exc
+
+    if code < 0x0000 or code > 0xFFFF:
+        raise ValueError(f"code out of range '{value}' (must be 0000-FFFF)")
+
+    return code
+
+
+def parse_exclude_range(value: str) -> tuple[int, int]:
+    start_str, sep, end_str = value.partition("-")
+    if not sep:
+        raise ValueError(f"invalid range '{value}' (use START-END)")
+
+    start = parse_codepoint(start_str)
+    end = parse_codepoint(end_str)
+    if start > end:
+        raise ValueError(f"invalid range '{value}' (start must be <= end)")
+
+    return (start, end)
+
+
+def is_excluded(code: int, exclude_ranges: list[tuple[int, int]]) -> bool:
+    return any(start <= code <= end for start, end in exclude_ranges)
+
+
 def decode_sjis_code(code: int) -> str | None:
     high = (code >> 8) & 0xFF
     low = code & 0xFF
@@ -51,6 +92,21 @@ def main() -> None:
     parser.add_argument("--glyph-height", type=int, default=16)
     parser.add_argument("--font-size", type=int, default=16)
     parser.add_argument("--offset-y", type=int, default=0)
+    parser.add_argument(
+        "--exclude-range",
+        action="append",
+        default=[],
+        metavar="START-END",
+        help=(
+            "Exclude SJIS code range in hex (e.g. ED40-EEFC). "
+            "Can be specified multiple times."
+        ),
+    )
+    parser.add_argument(
+        "--no-default-exclude-ranges",
+        action="store_true",
+        help="Do not apply default exclusion ranges for rarely used SJIS areas.",
+    )
 
     args = parser.parse_args()
 
@@ -59,6 +115,13 @@ def main() -> None:
 
     if args.glyph_width <= 0 or args.glyph_height <= 0 or args.font_size <= 0:
         raise SystemExit("glyph-width/glyph-height/font-size must be > 0")
+
+    exclude_ranges = [] if args.no_default_exclude_ranges else list(DEFAULT_EXCLUDE_RANGES)
+    for item in args.exclude_range:
+        try:
+            exclude_ranges.append(parse_exclude_range(item))
+        except ValueError as exc:
+            raise SystemExit(str(exc)) from exc
 
     font = ImageFont.truetype(args.font, size=args.font_size)
     atlas_w = 256 * args.glyph_width
@@ -69,6 +132,8 @@ def main() -> None:
     for high in range(256):
         for low in range(256):
             code = (high << 8) | low
+            if is_excluded(code, exclude_ranges):
+                continue
             ch = decode_sjis_code(code)
             if ch is None:
                 continue
