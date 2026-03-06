@@ -1,0 +1,25 @@
+Bundled asset: KH-Dot-Akihabara-16-sjis16.bmp.gz
+
+Source font:
+- File: KH-Dot-Akihabara-16.ttf
+- Upstream archive: khdotfont-20150527.zip
+- Upstream project: http://jikasei.me/font/kh-dotfont/
+
+Copyright:
+- Glyph design copyright belongs to Keitaro Hiraki.
+- Packaging/TrueType conversion by Jikasei Font Kobo.
+- See UPSTREAM_README_KHDotFont.txt for upstream attribution notes.
+
+License:
+- SIL Open Font License, Version 1.1
+- See LICENSE.OFL-1.1.txt
+
+Generation command (executed in this repository):
+python packages/make-sjis-bmp-from-ttf/make_sjis_bmp_from_ttf.py \
+  /tmp/khdotfont-work/KH-Dot-Akihabara-16.ttf \
+  --out packages/pixel-renderer/assets/fonts/kh-dot-akihabara-16/KH-Dot-Akihabara-16-sjis16.bmp.gz \
+  --glyph-width 16 \
+  --glyph-height 16 \
+  --font-size 16 \
+  --exclude-range 8740-879C \
+  --exclude-range F040-F9FC

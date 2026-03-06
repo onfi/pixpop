@@ -37,6 +37,14 @@ fn blend(dst: &mut [u8], idx: usize, sr: u8, sg: u8, sb: u8, sa: f32) {
     dst[idx + 3] = (out_a * 255.0).round().clamp(0.0, 255.0) as u8;
 }
 
+fn split_sjis_code(code: u16) -> (u32, u32) {
+    // Spec: 1-byte codes are zero-padded and stored as 0x00xx.
+    if code <= 0x00FF {
+        return (0, (code & 0x00FF) as u32);
+    }
+    (((code >> 8) & 0x00FF) as u32, (code & 0x00FF) as u32)
+}
+
 #[wasm_bindgen]
 pub fn create_canvas(width: u32, height: u32, r: u8, g: u8, b: u8) -> Vec<u8> {
     let mut out = vec![0; rgba_len(width, height)];
@@ -141,8 +149,7 @@ pub fn draw_sjis_text_1bit(
             continue;
         }
 
-        let high = ((*code >> 8) & 0x00FF) as u32;
-        let low = (*code & 0x00FF) as u32;
+        let (high, low) = split_sjis_code(*code);
         let gx = low * glyph_width;
         let gy = high * glyph_height;
 

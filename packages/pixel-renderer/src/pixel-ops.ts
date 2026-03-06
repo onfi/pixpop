@@ -2,6 +2,14 @@
 
 const CHANNELS = 4;
 
+function splitSjisCode(code: number): { high: number; low: number } {
+  // Spec: 1-byte codes are zero-padded and stored as 0x00xx.
+  if (code <= 0xff) {
+    return { high: 0x00, low: code & 0xff };
+  }
+  return { high: (code >> 8) & 0xff, low: code & 0xff };
+}
+
 export function parseHexColor(color: `#${string}`): [number, number, number] {
   const m = /^#([0-9a-fA-F]{6})$/.exec(color);
   if (!m) {
@@ -101,8 +109,7 @@ export function drawSjisText1Bit(
       continue;
     }
 
-    const high = (code >> 8) & 0xff;
-    const low = code & 0xff;
+    const { high, low } = splitSjisCode(code);
     const gx = low * glyphWidth;
     const gy = high * glyphHeight;
 

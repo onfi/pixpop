@@ -48,11 +48,25 @@ def is_excluded(code: int, exclude_ranges: list[tuple[int, int]]) -> bool:
     return any(start <= code <= end for start, end in exclude_ranges)
 
 
+def is_valid_double_byte_sjis(high: int, low: int) -> bool:
+    # Shift_JIS lead/trail byte ranges (0x7F is never valid as trail byte)
+    lead_ok = (0x81 <= high <= 0x9F) or (0xE0 <= high <= 0xFC)
+    trail_ok = (0x40 <= low <= 0x7E) or (0x80 <= low <= 0xFC)
+    return lead_ok and trail_ok
+
+
 def decode_sjis_code(code: int) -> str | None:
     high = (code >> 8) & 0xFF
     low = code & 0xFF
 
-    raw = bytes([low]) if high == 0x00 else bytes([high, low])
+    if high == 0x00:
+        # 1-byte codes are represented as 0x00xx in sjis-byte-matrix-256.
+        # Accept any cp932-decodable single byte.
+        raw = bytes([low])
+    else:
+        if not is_valid_double_byte_sjis(high, low):
+            return None
+        raw = bytes([high, low])
 
     try:
         ch = raw.decode("cp932")

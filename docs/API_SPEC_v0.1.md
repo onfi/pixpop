@@ -1,6 +1,6 @@
 ﻿# API仕様書 v0.1 (BMP + Manifest + SJIS)
 
-最終更新日: 2026-03-06
+最終更新日: 2026-03-07
 対象: `@your-scope/pixel-renderer` / `@your-scope/pixel-core-wasm`
 
 ## 1. 基本方針
@@ -26,6 +26,11 @@
 `sjis-byte-matrix-256`:
 - `x = lowByte * glyphWidth`
 - `y = highByte * glyphHeight`
+
+SJISコードの扱い:
+- 1バイト文字は `0x00xx` (0 pad) で表現する
+- 2バイト文字は `0xHHLL` で表現する
+- `highByte = 0x00` の場合は 1バイト文字として扱う
 
 ## 4. Manifest
 ```json

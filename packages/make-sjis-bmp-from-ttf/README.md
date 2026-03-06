@@ -2,6 +2,8 @@
 
 TTF/OTF から `sjis-byte-matrix-256` 互換の 1bit `bmp.gz` アトラスを生成するユーティリティです。
 
+`sjis-byte-matrix-256` では、1バイト文字は `0x00xx` (0 pad) として配置されます。
+
 ## Requirements
 
 - Python 3.10+
