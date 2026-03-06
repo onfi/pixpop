@@ -1,0 +1,9 @@
+﻿{
+  "name": "@your-scope/pixel-core-wasm",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "wasm-pack build --target bundler --out-dir pkg"
+  }
+}

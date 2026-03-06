@@ -1,0 +1,27 @@
+﻿{
+  "name": "@your-scope/pixel-renderer",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./node-adapters": {
+      "types": "./dist/node-adapters.d.ts",
+      "import": "./dist/node-adapters.js"
+    },
+    "./web-adapters": {
+      "types": "./dist/web-adapters.d.ts",
+      "import": "./dist/web-adapters.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  }
+}

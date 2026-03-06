@@ -1,0 +1,9 @@
+﻿{
+  "name": "pixel-renderer-workspace",
+  "private": true,
+  "version": "0.1.0",
+  "packageManager": "pnpm@10.6.0",
+  "scripts": {
+    "build": "pnpm -r build"
+  }
+}
