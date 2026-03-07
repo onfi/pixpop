@@ -132,3 +132,49 @@ test('toPng throws when encodePng is not configured', async () => {
     return true;
   });
 });
+
+test('toImage throws when Image API is unavailable', async () => {
+  const renderer = createPixelRenderer();
+  const result = await renderer.render({
+    width: 1,
+    height: 1,
+    backgroundColor: '#000000',
+    requests: [],
+  });
+
+  await assert.rejects(() => result.toImage(), (err) => {
+    assert.ok(err instanceof PixelRendererError);
+    assert.equal(err.code, 'E_WEB_API_UNAVAILABLE');
+    return true;
+  });
+});
+
+test('default encoder maps UTF-8 kanji to CP932 code', async () => {
+  const renderer = createPixelRenderer();
+  const glyphWidth = 1;
+  const glyphHeight = 1;
+  const cp932KanjiCode = 0x8abf;
+
+  await renderer.registerBitmapFont({
+    manifest: {
+      version: 1,
+      encoding: 'sjis',
+      atlas: 'unused.bin',
+      glyphWidth,
+      glyphHeight,
+      layout: 'sjis-byte-matrix-256',
+      bitDepth: 1,
+      bitOrder: 'msb',
+    },
+    atlas1bit: makePackedAtlasWithSinglePixel(glyphWidth, glyphHeight, cp932KanjiCode, 'msb'),
+  });
+
+  const result = await renderer.render({
+    width: 2,
+    height: 2,
+    backgroundColor: '#000000',
+    requests: [{ type: 'text', x: 0, y: 0, text: '漢', scale: 1, color: '#ffffff' }],
+  });
+
+  assert.deepEqual(getPixel(result.image, 0, 0), [255, 255, 255, 255]);
+});

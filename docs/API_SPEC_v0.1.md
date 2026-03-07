@@ -5,7 +5,7 @@
 
 ## 1. 基本方針
 - フォントは `BMP(1bit) + manifest` で管理
-- UTF-8 -> SJIS 変換は TS 側
+- UTF-8 -> CP932(SJISコード) 変換は TS 側
 - フォントは 1bit のまま登録
 - 背景色でキャンバス初期化後、リクエスト配列を順次描画
 
@@ -32,6 +32,11 @@ SJISコードの扱い:
 - 2バイト文字は `0xHHLL` で表現する
 - `highByte = 0x00` の場合は 1バイト文字として扱う
 
+エンコード仕様:
+- デフォルトの `encodeSjis` は UTF-8文字列を CP932 コードへ変換する
+- マッピング不可文字は `0x003f` (`?`) にフォールバックする
+- 必要に応じて `RendererOptions.encodeSjis` で上書き可能
+
 ## 4. Manifest
 ```json
 {
@@ -50,6 +55,8 @@ SJISコードの扱い:
 - `BitmapFontSource = { manifest, atlas1bit }`
 - `WasmRenderInput = { width, height, backgroundColor, requests }`
 - `RendererOptions = { resolveAsset, decodeSpriteImage, encodePng, encodeSjis, wasm }`
+- `RenderResult = { image, toPng(), toImage() }`
+  - `toImage()` は `encodePng` と Web `Image` API が利用可能な環境で `HTMLImageElement` を返す
 
 ## 6. WASM Core IF
 - `create_canvas(width,height,r,g,b)`

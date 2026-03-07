@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "encoding": "sjis",
+  "atlas": "KH-Dot-Akihabara-16-sjis16.bmp.gz",
+  "glyphWidth": 16,
+  "glyphHeight": 16,
+  "layout": "sjis-byte-matrix-256",
+  "bitDepth": 1,
+  "bitOrder": "msb"
+}

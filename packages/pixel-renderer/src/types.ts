@@ -53,6 +53,7 @@ export type WasmRenderInput = {
 export type RenderResult = {
   image: RgbaImage;
   toPng(): Promise<Uint8Array>;
+  toImage(): Promise<HTMLImageElement>;
 };
 
 export type WasmCore = {

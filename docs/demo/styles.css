@@ -1,0 +1,115 @@
+:root {
+  --bg: #0f1220;
+  --panel: #1b2240;
+  --panel-soft: #131933;
+  --text: #eff3ff;
+  --muted: #a7b3d8;
+  --accent: #6ce6ff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Noto Sans JP", "Hiragino Kaku Gothic ProN", sans-serif;
+  color: var(--text);
+  background: radial-gradient(circle at top right, #24376f, var(--bg) 55%);
+  min-height: 100vh;
+}
+
+.app {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 20px;
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 360px 1fr;
+}
+
+.panel {
+  background: linear-gradient(180deg, var(--panel), var(--panel-soft));
+  border: 1px solid #3d4a7a;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+h1, h2 {
+  margin: 0 0 8px;
+}
+
+.muted {
+  margin: 0 0 12px;
+  color: var(--muted);
+}
+
+label {
+  display: block;
+  font-size: 14px;
+  margin-top: 10px;
+  margin-bottom: 6px;
+}
+
+textarea,
+input,
+button,
+a {
+  width: 100%;
+}
+
+textarea,
+input,
+button {
+  border: 1px solid #5062a0;
+  border-radius: 8px;
+  background: #0c1330;
+  color: var(--text);
+  padding: 10px;
+}
+
+input[type="color"] {
+  height: 40px;
+  padding: 4px;
+}
+
+button,
+a {
+  display: inline-block;
+  text-align: center;
+  margin-top: 10px;
+  text-decoration: none;
+  cursor: pointer;
+  background: #0d2a50;
+  color: #e9f8ff;
+  border: 1px solid #5586bf;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.status {
+  min-height: 1.5em;
+  margin-top: 12px;
+  color: var(--muted);
+}
+
+.preview {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+#pngPreview {
+  image-rendering: pixelated;
+  width: min(100%, 768px);
+  height: auto;
+  aspect-ratio: 256 / 224;
+  border: 1px solid #51629c;
+  background: #000;
+}
+
+@media (max-width: 920px) {
+  .app {
+    grid-template-columns: 1fr;
+  }
+}

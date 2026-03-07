@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pixpop demo</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <section class="panel controls">
+        <h1>pixpop demo</h1>
+        <p class="muted">256x224 PNG / KH-Dot-Akihabara-16</p>
+
+        <label for="textInput">テキスト</label>
+        <textarea id="textInput" rows="5" placeholder="文字を入力...">PIXPOPの
+デモです
+書きかえてみてね</textarea>
+
+        <label for="colorInput">文字色</label>
+        <input id="colorInput" type="color" value="#ffffff" />
+
+        <label for="backgroundInput">背景画像 (任意)</label>
+        <input id="backgroundInput" type="file" accept="image/*" />
+
+        <button id="resetBgButton" type="button">背景をデフォルトに戻す</button>
+
+        <a id="downloadLink" href="#" download="pixpop-demo.png">PNGをダウンロード</a>
+        <p id="status" class="status">初期化中...</p>
+      </section>
+
+      <section class="panel preview">
+        <h2>Preview</h2>
+        <img id="pngPreview" alt="PNG preview" width="256" height="224" />
+      </section>
+    </main>
+
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

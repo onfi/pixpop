@@ -11,6 +11,7 @@
 } from "./types.js";
 import { blitScaledRgba, createCanvas, drawSjisText1Bit, parseHexColor } from "./pixel-ops.js";
 import { bmp1ToPackedBlackBits, parseBmp1 } from "./bmp.js";
+import { createDefaultCp932SjisEncoder } from "./cp932-map.js";
 
 type RegisteredFont = {
   id: string;
@@ -83,14 +84,7 @@ function toBytes(input: ArrayBuffer | Uint8Array): Uint8Array {
   return input instanceof Uint8Array ? input : new Uint8Array(input);
 }
 
-function defaultEncodeSjis(text: string): Uint16Array {
-  const out = new Uint16Array(text.length);
-  for (let i = 0; i < text.length; i += 1) {
-    const code = text.charCodeAt(i);
-    out[i] = code <= 0xff ? code : 0x003f;
-  }
-  return out;
-}
+const defaultEncodeSjis = createDefaultCp932SjisEncoder();
 
 function looksLikeBmp(bytes: Uint8Array): boolean {
   return bytes.length > 2 && bytes[0] === 0x42 && bytes[1] === 0x4d;
@@ -265,6 +259,31 @@ export class PixelRendererImpl implements PixelRenderer {
           throw new PixelRendererError("E_INVALID_IMAGE_DATA", "encodePng option is not configured.");
         }
         return this.encodePng(image);
+      },
+      toImage: async (): Promise<HTMLImageElement> => {
+        if (typeof Image === "undefined") {
+          throw new PixelRendererError("E_WEB_API_UNAVAILABLE", "Image API is not available.");
+        }
+        const png = await (async (): Promise<Uint8Array> => {
+          if (!this.encodePng) {
+            throw new PixelRendererError("E_INVALID_IMAGE_DATA", "encodePng option is not configured.");
+          }
+          return this.encodePng(image);
+        })();
+        const copy = new Uint8Array(png.byteLength);
+        copy.set(png);
+        const blob = new Blob([copy.buffer as ArrayBuffer], { type: "image/png" });
+        const url = URL.createObjectURL(blob);
+        const img = new Image();
+        return await new Promise((resolve, reject) => {
+          img.onload = () => {
+            resolve(img);
+          };
+          img.onerror = () => {
+            reject(new PixelRendererError("E_INVALID_IMAGE_DATA", "Failed to decode PNG into HTMLImageElement."));
+          };
+          img.src = url;
+        });
       },
     };
   }

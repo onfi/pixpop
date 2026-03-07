@@ -5,6 +5,8 @@ v0.1 implementation for:
 - Ordered render requests (`png` / `text`)
 - SJIS code rendering on 1bit atlas
 - JS fallback core and pluggable WASM core
+- Default UTF-8 -> CP932 text encoding
+- RenderResult helpers: `toPng()` / `toImage()`
 
 ## Bundled Font Asset
 
@@ -21,3 +23,17 @@ License and attribution for this font asset are included in the same directory.
 - `@your-scope/pixel-renderer`
 - `@your-scope/pixel-renderer/node-adapters`
 - `@your-scope/pixel-renderer/web-adapters`
+
+## RenderResult Usage
+
+- `toPng()`:
+  - Works in both Node and browser (requires `encodePng` option).
+  - Returns PNG bytes (`Uint8Array`).
+- `toImage()`:
+  - Browser-only API.
+  - Returns `HTMLImageElement`.
+  - In Node, this throws `E_WEB_API_UNAVAILABLE`.
+
+Recommended:
+- Node: use `toPng()` and write bytes to file/network.
+- Browser: use `toImage()` for preview, `toPng()` for download/export.

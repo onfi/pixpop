@@ -1,4 +1,6 @@
-﻿import { EncodeSjisFn } from "./types.js";
+import { EncodeSjisFn } from "./types.js";
+
+export { createDefaultCp932SjisEncoder } from "./cp932-map.js";
 
 export function createAsciiFallbackSjisEncoder(replacement: number = 0x003f): EncodeSjisFn {
   return (text: string): Uint16Array => {
