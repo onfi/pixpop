@@ -1,5 +1,5 @@
 {
-  "name": "@your-scope/pixel-renderer",
+  "name": "pixpop",
   "version": "0.1.0",
   "type": "module",
   "main": "dist/index.js",
@@ -25,5 +25,6 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "test": "npm run build && node --test test/**/*.test.mjs"
-  }
+  },
+  "license": "MIT"
 }

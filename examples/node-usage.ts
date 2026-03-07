@@ -1,5 +1,5 @@
-﻿import { createPixelRenderer, loadWasmCore } from "@your-scope/pixel-renderer";
-import { createNodeCodecAdapters, createNodeFsAssetResolver } from "@your-scope/pixel-renderer/node-adapters";
+﻿import { createPixelRenderer, loadWasmCore } from "pixpop";
+import { createNodeCodecAdapters, createNodeFsAssetResolver } from "pixpop/node-adapters";
 
 async function main(): Promise<void> {
   const wasm = await loadWasmCore(() => import("@your-scope/pixel-core-wasm/pkg"));

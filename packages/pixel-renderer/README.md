@@ -1,4 +1,4 @@
-# @your-scope/pixel-renderer
+# pixpop
 
 v0.1 implementation for:
 - BMP(1bit) + manifest font registration
@@ -20,9 +20,9 @@ The package includes a distributable KH-Dot font atlas:
 License and attribution for this font asset are included in the same directory.
 
 ## Entry Points
-- `@your-scope/pixel-renderer`
-- `@your-scope/pixel-renderer/node-adapters`
-- `@your-scope/pixel-renderer/web-adapters`
+- `pixpop`
+- `pixpop/node-adapters`
+- `pixpop/web-adapters`
 
 ## RenderResult Usage
 
@@ -37,3 +37,13 @@ License and attribution for this font asset are included in the same directory.
 Recommended:
 - Node: use `toPng()` and write bytes to file/network.
 - Browser: use `toImage()` for preview, `toPng()` for download/export.
+
+## License
+
+- `pixpop` code: MIT
+- bundled KH-Dot font asset: SIL Open Font License 1.1 (OFL-1.1)
+  - upstream: http://jikasei.me/font/kh-dotfont/
+  - see `assets/fonts/kh-dot-akihabara-16/LICENSE.OFL-1.1.txt` and `NOTICE.txt`
+
+Acknowledgements:
+- Thanks to Jikasei Font Kobo and related authors for publishing KH-Dot Font.

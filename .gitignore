@@ -2,3 +2,5 @@
 dist/
 target/
 Cargo.lock
+!docs/demo/vendor/pixel-renderer/dist/
+!docs/demo/vendor/pixel-renderer/dist/**
